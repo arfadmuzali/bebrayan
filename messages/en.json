@@ -1,0 +1,16 @@
+{
+  "AuthPage": {
+    "join": "Join Now",
+    "signIn": "Sign in",
+    "description": "Sign in to your Bebrayan account to share your thoughts and connect with a trusted circle of friends in a private, secure space. Your conversations, your community, your privacy.",
+    "google": "Continue with Google"
+  },
+  "Navbar": {
+    "search": "Search",
+    "messages": "Messages",
+    "home": "Home",
+    "setting": "Setting",
+    "profile": "Profile",
+    "logout": "Log out"
+  }
+}

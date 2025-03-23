@@ -1,0 +1,16 @@
+{
+  "AuthPage": {
+    "join": "Bergabung Sekarang",
+    "signIn": "Masuk",
+    "google": "Masuk menggunakan Google",
+    "description": "Masuk ke akun Bebrayan Anda untuk berbagi pemikiran dan terhubung dengan lingkaran teman terpercaya dalam ruang yang privat dan aman. Percakapan Anda, komunitas Anda, privasi Anda."
+  },
+  "Navbar": {
+    "search": "Cari",
+    "messages": "Pesan",
+    "home": "Halaman Utama",
+    "setting": "Pengaturan",
+    "profile": "Profil",
+    "logout": "Keluar"
+  }
+}
