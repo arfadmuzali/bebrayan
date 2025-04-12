@@ -12,5 +12,29 @@
     "setting": "Setting",
     "profile": "Profile",
     "logout": "Log out"
+  },
+  "Profile": {
+    "notFound": "Profile not found",
+    "notFoundDescription": "The user profile you're looking for doesn't exist or may have been removed.",
+    "returnHome": "Return home",
+    "follow": "Follow",
+    "unfollow": "Unfollow",
+    "edit": "Edit",
+    "followers": "Followers",
+    "following": "Following",
+    "posts": "Posts"
+  },
+  "Post": {
+    "repost": "Repost",
+    "comment": "Comment",
+    "notFoundDescription": "The post you're looking for doesn't exist or may have been removed.",
+    "like": "Like",
+    "share": "Share post",
+    "returnHome": "Return home",
+    "notFound": "Post not found",
+    "reply": "Reply",
+    "replyTo": "Reply to",
+    "yourReply": "Your reply",
+    "commentLimitMessage": "Comment limit is 280 char"
   }
 }

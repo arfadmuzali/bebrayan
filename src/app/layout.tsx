@@ -25,14 +25,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
-
   const session = await auth();
-
   const messages = await getMessages();
+
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className={`${nunito.className} antialiased`}>
-        <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus={false}>
           <QueryProvider>
             <NextIntlClientProvider messages={messages}>
               <ProgressBarProvider>

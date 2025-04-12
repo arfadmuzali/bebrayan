@@ -21,7 +21,7 @@ export async function GET() {
 
     return NextResponse.json(user);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return NextResponse.json(
       {
         error: {

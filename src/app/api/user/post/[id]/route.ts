@@ -2,22 +2,31 @@ import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = (await params).id;
+    const { id } = await params;
 
-    const user = await prisma.user.findUnique({
+    const posts = await prisma.post.findMany({
       where: {
-        id,
+        userId: id,
+      },
+      include: {
+        user: true,
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            reposts: true,
+          },
+        },
       },
     });
 
-    return NextResponse.json(user);
+    return NextResponse.json(posts);
   } catch (error) {
     console.error(error);
-
     return NextResponse.json(
       {
         error: {

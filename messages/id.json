@@ -1,6 +1,6 @@
 {
   "AuthPage": {
-    "join": "Bergabung Sekarang",
+    "join": "Bergabung sekarang",
     "signIn": "Masuk",
     "google": "Masuk menggunakan Google",
     "description": "Masuk ke akun Bebrayan Anda untuk berbagi pemikiran dan terhubung dengan lingkaran teman terpercaya dalam ruang yang privat dan aman. Percakapan Anda, komunitas Anda, privasi Anda."
@@ -8,9 +8,33 @@
   "Navbar": {
     "search": "Cari",
     "messages": "Pesan",
-    "home": "Halaman Utama",
+    "home": "Halaman utama",
     "setting": "Pengaturan",
     "profile": "Profil",
     "logout": "Keluar"
+  },
+  "Profile": {
+    "notFound": "Profil tidak ditemukan",
+    "notFoundDescription": "User profil yang kamu cari tidak ada atau sudah dihapus",
+    "returnHome": "Kembali",
+    "follow": "Ikuti",
+    "unfollow": "Berhenti ikuti",
+    "edit": "Edit",
+    "followers": "Pengikut",
+    "following": "Mengikuti",
+    "posts": "Postingan"
+  },
+  "Post": {
+    "repost": "Posting ulang",
+    "notFoundDescription": "Post yang kamu cari tidak ada atau sudah dihapus",
+    "comment": "Komen",
+    "like": "Suka",
+    "share": "Bagikan postingan",
+    "returnHome": "Kembali",
+    "notFound": "Postingan tidak ditemukan",
+    "reply": "Membalas",
+    "replyTo": "Membalas",
+    "yourReply": "Balasan Anda",
+    "commentLimitMessage": "Batas untuk balasan adalah 280 karakter"
   }
 }
