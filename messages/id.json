@@ -25,9 +25,13 @@
     "posts": "Postingan"
   },
   "Post": {
+    "post": "Posting",
     "repost": "Posting ulang",
+    "cancelRepost": "Batalkan repost",
+    "reposted": "memposting ulang",
     "notFoundDescription": "Post yang kamu cari tidak ada atau sudah dihapus",
     "comment": "Komen",
+    "deleteComment": "Hapus komentar",
     "like": "Suka",
     "share": "Bagikan postingan",
     "returnHome": "Kembali",
@@ -35,6 +39,9 @@
     "reply": "Membalas",
     "replyTo": "Membalas",
     "yourReply": "Balasan Anda",
-    "commentLimitMessage": "Batas untuk balasan adalah 280 karakter"
+    "commentLimitMessage": "Batas untuk balasan adalah 280 karakter",
+    "postLimitMessage": "Batas untuk postingan adalah 280 karakter",
+    "makeAPost": "Buat postingan",
+    "visitProfile": "Kunjungi profil"
   }
 }

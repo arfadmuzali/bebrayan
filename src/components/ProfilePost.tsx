@@ -10,9 +10,10 @@ interface Post {
   content: string;
   createdAt: Date;
   userId: string;
-  originalPostId: null;
+  originalPostId: null | string;
   user: User;
   _count: Count;
+  originalPost?: Post | null;
 }
 
 interface Count {
@@ -42,7 +43,7 @@ export default function ProfilePost({ id }: { id: string }) {
   });
 
   return (
-    <div className="flex gap-5 flex-col ">
+    <div className="flex flex-col ">
       {isLoading && (
         <div className="w-full grid place-items-center">
           <LoadingSpinner className="h-12 w-12" />
@@ -51,7 +52,11 @@ export default function ProfilePost({ id }: { id: string }) {
       {posts?.map((post) => {
         return (
           <div key={post.id} className="border-b px-2 md:px-12 lg:px-16">
-            <Post post={post} />
+            {post.originalPost ? (
+              <Post post={post.originalPost} repostedByUser={post.user} />
+            ) : (
+              <Post post={post} />
+            )}
           </div>
         );
       })}

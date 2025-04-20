@@ -29,7 +29,7 @@ interface PostCount {
 
 interface Post {
   id: string;
-  content: string;
+  content: string | null;
   createdAt: Date;
   userId: string;
   originalPostId: string | null;
@@ -131,7 +131,7 @@ export default async function Post({
             </h5>
           </div>
         </div>
-        <p className="leading-relaxed max-w-screen-2xl mx-auto tracking-wide md:text-xl text-lg py-4">
+        <p className="leading-relaxed whitespace-pre-line max-w-screen-2xl mx-auto tracking-wide md:text-xl text-lg py-4">
           {post.content}
         </p>
         <PostButtons post={post} />

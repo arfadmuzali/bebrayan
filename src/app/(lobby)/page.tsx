@@ -6,6 +6,7 @@ import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import CreatePost from "@/components/CreatePost";
 
 export default function HomePage() {
   const { data: user, isLoading: userIsLoading } = useQuery({
@@ -20,7 +21,7 @@ export default function HomePage() {
   return (
     <div className="mx-auto grid grid-cols-1 lg:grid-cols-4 max-w-screen-2xl gap-5  px-0 md:px-12 lg:px-16">
       {/* profile */}
-      <div className="rounded-md px-6 border md:h-96 h-full py-6 ">
+      <div className="rounded-md p-2 md:px-4 border md:h-96 h-full  ">
         {userIsLoading ? (
           <div className="w-full flex items-center justify-center h-full">
             <LoadingSpinner className="h-12 w-12" />
@@ -42,7 +43,9 @@ export default function HomePage() {
         )}
       </div>
       {/* main feed */}
-      <div className="lg:col-span-2 rounded-md px-4 border h-96">content</div>
+      <div className="lg:col-span-2 rounded-md  h-96">
+        <CreatePost />
+      </div>
 
       <div className="rounded-md px-4 border h-96">content</div>
     </div>

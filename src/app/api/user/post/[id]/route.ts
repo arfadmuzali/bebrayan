@@ -9,6 +9,9 @@ export async function GET(
     const { id } = await params;
 
     const posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
       where: {
         userId: id,
       },
@@ -19,6 +22,18 @@ export async function GET(
             comments: true,
             likes: true,
             reposts: true,
+          },
+        },
+        originalPost: {
+          include: {
+            user: true,
+            _count: {
+              select: {
+                comments: true,
+                likes: true,
+                reposts: true,
+              },
+            },
           },
         },
       },

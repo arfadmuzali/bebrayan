@@ -1,11 +1,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-
-const likeSchema = z.object({
-  like: z.boolean(),
-});
 
 export async function POST(
   req: NextRequest,
@@ -25,27 +20,15 @@ export async function POST(
       );
     }
 
-    const body = await req.json();
-    const { data: request, error } = likeSchema.safeParse(body);
-    const { id: postId } = await params;
-
-    if (!postId || error) {
-      return NextResponse.json(
-        {
-          error: {
-            message: "Bad Request",
-            errors: error,
-          },
-        },
-        { status: 404 }
-      );
-    }
+    const { id } = await params;
 
     const post = await prisma.post.findUnique({
       where: {
-        id: postId,
+        id,
       },
-      select: { id: true },
+      select: {
+        id: true,
+      },
     });
 
     if (!post) {
@@ -59,11 +42,11 @@ export async function POST(
       );
     }
 
-    const existingLike = await prisma.like.findUnique({
+    const isRepostExisting = await prisma.post.findUnique({
       where: {
-        userId_postId: {
-          userId: session.user?.id,
-          postId,
+        userId_originalPostId: {
+          userId: session.user.id,
+          originalPostId: post.id,
         },
       },
       select: {
@@ -71,30 +54,41 @@ export async function POST(
       },
     });
 
-    if (existingLike) {
-      await prisma.like.delete({
-        where: { userId_postId: { userId: session.user.id, postId } },
+    let reposted: boolean = false;
+
+    if (isRepostExisting) {
+      await prisma.post.delete({
+        where: {
+          userId_originalPostId: {
+            userId: session.user.id,
+            originalPostId: post.id,
+          },
+        },
         select: {
           id: true,
         },
       });
     } else {
-      await prisma.like.create({
-        data: { userId: session.user.id, postId },
+      await prisma.post.create({
+        data: {
+          originalPostId: post.id,
+          userId: session.user.id,
+        },
         select: {
           id: true,
         },
       });
+      reposted = true;
     }
 
-    return NextResponse.json(request);
+    return NextResponse.json({ reposted });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
         error: {
-          message: "Internal Server Error",
+          message: "Internal server error",
         },
       },
       { status: 500 }
@@ -110,36 +104,23 @@ export async function GET(
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ isUserLiked: false });
-    }
-
-    const { id: postId } = await params;
-
-    const post = await prisma.post.findUnique({
-      where: {
-        id: postId,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!post) {
       return NextResponse.json(
         {
           error: {
-            message: "Post not found",
+            message: "Unauthorized",
           },
         },
-        { status: 404 }
+        { status: 401 }
       );
     }
 
-    const existingLike = await prisma.like.findUnique({
+    const { id } = await params;
+
+    const repost = await prisma.post.findUnique({
       where: {
-        userId_postId: {
-          postId: post.id,
-          userId: session?.user?.id,
+        userId_originalPostId: {
+          userId: session.user.id,
+          originalPostId: id,
         },
       },
       select: {
@@ -147,7 +128,7 @@ export async function GET(
       },
     });
 
-    return NextResponse.json({ isUserLiked: !!existingLike });
+    return NextResponse.json({ reposted: !!repost });
   } catch (error) {
     console.error(error);
 

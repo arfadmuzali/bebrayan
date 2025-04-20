@@ -9,6 +9,13 @@ import TooltipWrap from "./ui/tooltip-wrap";
 import { Heart, MessageCircle, Repeat2, Share } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { LoadingSpinner } from "./ui/loading-spinner";
 
 interface User {
   id: string;
@@ -24,7 +31,7 @@ interface PostCount {
 
 interface Post {
   id: string;
-  content: string;
+  content: string | null;
   createdAt: Date;
   userId: string;
   originalPostId: string | null;
@@ -33,28 +40,20 @@ interface Post {
 }
 
 interface Like {
-  likes: LikeElement[];
   isUserLiked: boolean;
 }
 
-interface LikeElement {
-  id: string;
-  userId: string;
-  user: UserLike;
+interface Repost {
+  reposted: boolean;
 }
-
-interface UserLike {
-  id: string;
-  image: string;
-  name: string;
-}
-
 export default function PostButtons({ post }: { post: Post }) {
   const queryClient = useQueryClient();
 
   const t = useTranslations("Post");
 
   const [likesCount, setLikesCount] = useState(post._count.likes);
+  const [repostCount, setRepostCount] = useState(post._count.reposts);
+
   const { data } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: async () => {
@@ -76,6 +75,32 @@ export default function PostButtons({ post }: { post: Post }) {
     [mutation.mutate]
   );
 
+  const { data: repostData } = useQuery({
+    queryKey: ["repostPost", post.id],
+    queryFn: async () => {
+      const response = await axios.get<Repost>("/api/post/repost/" + post.id);
+      return response.data;
+    },
+  });
+
+  const repostMutation = useMutation({
+    mutationFn: async () => {
+      const response = await axios.post<Repost>("/api/post/repost/" + post.id);
+      return response.data;
+    },
+    onSuccess: async (data) => {
+      if (data.reposted) {
+        setRepostCount((prev) => prev + 1);
+      } else {
+        setRepostCount((prev) => prev - 1);
+      }
+
+      queryClient.setQueryData(["repostPost", post.id], () => {
+        return data;
+      });
+    },
+  });
+
   return (
     <div className="flex justify-between py-2 items-center max-w-screen-2xl mx-auto">
       <div className="flex md:gap-20 gap-8 items-center">
@@ -86,13 +111,45 @@ export default function PostButtons({ post }: { post: Post }) {
           </button>
         </TooltipWrap>
 
-        <TooltipWrap content={t("repost")}>
-          <button className="flex items-center gap-1 font-semibold">
-            <Repeat2 className="h-5 w-5 " />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              className={cn(
+                "flex items-center gap-1  font-semibold",
+                repostData?.reposted && "text-primary"
+              )}
+            >
+              <Repeat2 className="h-5 w-5 " />
 
-            <span>{post._count.reposts}</span>
-          </button>
-        </TooltipWrap>
+              <span>{repostCount}</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="min-w-40">
+            {/* <DropdownMenuGroup> */}
+            <DropdownMenuItem>
+              <button
+                onClick={() => {
+                  repostMutation.mutate();
+                }}
+                disabled={repostMutation.isPending}
+                className="flex items-center w-full gap-1 font-semibold"
+              >
+                {repostMutation.isPending ? (
+                  <div className="flex items-center justify-center w-full">
+                    <LoadingSpinner />
+                  </div>
+                ) : (
+                  <span className="flex gap-1 items-center">
+                    <Repeat2 />
+
+                    {repostData?.reposted ? t("cancelRepost") : t("repost")}
+                  </span>
+                )}
+              </button>
+            </DropdownMenuItem>
+            {/* </DropdownMenuGroup> */}
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <TooltipWrap content={t("like")}>
           <button

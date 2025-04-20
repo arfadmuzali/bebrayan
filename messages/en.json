@@ -25,8 +25,12 @@
     "posts": "Posts"
   },
   "Post": {
+    "post": "Post",
     "repost": "Repost",
+    "cancelRepost": "Cancel repost",
+    "reposted": "reposted",
     "comment": "Comment",
+    "deleteComment": "Delete comment",
     "notFoundDescription": "The post you're looking for doesn't exist or may have been removed.",
     "like": "Like",
     "share": "Share post",
@@ -35,6 +39,9 @@
     "reply": "Reply",
     "replyTo": "Reply to",
     "yourReply": "Your reply",
-    "commentLimitMessage": "Comment limit is 280 char"
+    "commentLimitMessage": "Comment limit is 280 char",
+    "postLimitMessage": "Post limit is 280 char",
+    "makeAPost": "Make a post",
+    "visitProfile": "Visit profile"
   }
 }

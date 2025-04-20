@@ -27,7 +27,7 @@ interface PostCount {
 
 interface Post {
   id: string;
-  content: string;
+  content: string | null;
   createdAt: Date;
   userId: string;
   originalPostId: string | null;
@@ -59,7 +59,6 @@ export default function Comment({ post }: { post: Post }) {
         postId: post.id,
         content: comment,
       });
-      console.log(response.data);
       return response.data;
     },
     onError: async (error) => {
