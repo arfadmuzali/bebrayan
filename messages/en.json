@@ -31,6 +31,7 @@
     "reposted": "reposted",
     "comment": "Comment",
     "deleteComment": "Delete comment",
+    "deletePost": "Delete post",
     "notFoundDescription": "The post you're looking for doesn't exist or may have been removed.",
     "like": "Like",
     "share": "Share post",
@@ -43,5 +44,10 @@
     "postLimitMessage": "Post limit is 280 char",
     "makeAPost": "Make a post",
     "visitProfile": "Visit profile"
+  },
+  "Info": {
+    "moreInformation": "More information",
+    "madeWithLove": "Made with ❤️ by Arfad Muzali",
+    "websitePurpose": "This website is created for author portfolio purposes."
   }
 }

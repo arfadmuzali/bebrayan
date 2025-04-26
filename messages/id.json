@@ -32,6 +32,7 @@
     "notFoundDescription": "Post yang kamu cari tidak ada atau sudah dihapus",
     "comment": "Komen",
     "deleteComment": "Hapus komentar",
+    "deletePost": "Hapus Postingan",
     "like": "Suka",
     "share": "Bagikan postingan",
     "returnHome": "Kembali",
@@ -43,5 +44,10 @@
     "postLimitMessage": "Batas untuk postingan adalah 280 karakter",
     "makeAPost": "Buat postingan",
     "visitProfile": "Kunjungi profil"
+  },
+  "Info": {
+    "moreInformation": "Informasi selengkapnya",
+    "madeWithLove": "Dibuat dengan ❤️ oleh Arfad Muzali",
+    "websitePurpose": "Website ini dibuat untuk tujuan portfolio author."
   }
 }

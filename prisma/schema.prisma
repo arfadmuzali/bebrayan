@@ -43,7 +43,7 @@ model Post {
   userId         String
   user           User      @relation(fields: [userId], references: [id])
   originalPostId String?
-  originalPost   Post?     @relation("Repost", fields: [originalPostId], references: [id])
+  originalPost   Post?     @relation("Repost", fields: [originalPostId], references: [id], onDelete: NoAction)
   reposts        Post[]    @relation("Repost")
   likes          Like[]
   comments       Comment[]
@@ -67,9 +67,9 @@ model Comment {
   content   String   @db.VarChar(280)
   createdAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Follows {

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { format } from "date-fns";
-import { Heart, MessageCircle, Repeat2, Share } from "lucide-react";
+import { Ellipsis, Heart, MessageCircle, Repeat2, Share } from "lucide-react";
 import debounce from "lodash.debounce";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
@@ -138,6 +139,21 @@ export default function Post({
     },
   });
 
+  const deletePost = useMutation({
+    mutationFn: async () => {
+      const response = await axios.delete(`/api/post/${post.id}`);
+      return response.data;
+    },
+    onSuccess: async () => {
+      queryClient.setQueryData(
+        ["profilePost", session?.user?.id],
+        (oldData: Post[]) => {
+          return oldData.filter((oldPost) => oldPost.id !== post.id);
+        }
+      );
+    },
+  });
+
   if (isLoading || repostIsLoading) {
     return <PostSkeleton />;
   }
@@ -157,27 +173,61 @@ export default function Post({
         </Link>
       )}
 
-      <div className="flex gap-4">
-        <Link href={"/profile/" + post.user?.id}>
-          <Avatar className="h-12 w-12">
-            <AvatarImage
-              src={post.user?.image ?? "/avatar-placeholder.svg"}
-              alt="Av"
-            />
-            <AvatarFallback>AV</AvatarFallback>
-          </Avatar>
-        </Link>
-        <div className="flex gap-4 items-center">
+      <div className="flex  justify-between items-center">
+        <div className="flex gap-4">
           <Link href={"/profile/" + post.user?.id}>
-            <h2 className="font-semibold text-lg">{post.user.name}</h2>
+            <Avatar className="h-12 w-12">
+              <AvatarImage
+                src={post.user?.image ?? "/avatar-placeholder.svg"}
+                alt="Av"
+              />
+              <AvatarFallback>AV</AvatarFallback>
+            </Avatar>
           </Link>
-          <div className="grid place-items-center">
-            <div className="bg-muted-foreground h-1 w-1 rounded-full" />
+          <div className="flex gap-4 items-center">
+            <Link href={"/profile/" + post.user?.id}>
+              <h2 className="font-semibold text-lg">{post.user.name}</h2>
+            </Link>
+            <div className="grid place-items-center">
+              <div className="bg-muted-foreground h-1 w-1 rounded-full" />
+            </div>
+            <p className="text-muted-foreground">
+              {format(new Date(post.createdAt), "MMMM dd")}
+            </p>
           </div>
-          <p className="text-muted-foreground">
-            {format(new Date(post.createdAt), "MMMM dd")}
-          </p>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className={cn("flex items-center gap-1  font-semibold")}>
+              <Ellipsis className="h-5 w-5 " />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              {post.userId === session?.user?.id && (
+                <DropdownMenuItem
+                  disabled={deletePost.isPending}
+                  onClick={() => {
+                    deletePost.mutate();
+                  }}
+                >
+                  {deletePost.isPending ? (
+                    <div className="w-full flex justify-center ">
+                      <LoadingSpinner />
+                    </div>
+                  ) : (
+                    t("deletePost")
+                  )}
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem>
+                <Link href={"/profile/" + post.user.id}>
+                  {t("visitProfile")}
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="z-10">
         <Link href={`/post/${post.id}`}>
