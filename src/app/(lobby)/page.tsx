@@ -38,7 +38,7 @@ export default function HomePage() {
   });
 
   return (
-    <div className="mx-auto grid grid-cols-1 lg:grid-cols-4 max-w-screen-2xl gap-5  px-0 md:px-12 lg:px-16">
+    <div className="mx-auto grid grid-cols-1 lg:grid-cols-4 max-w-screen-2xl gap-5 px-0 md:px-12 lg:px-16">
       {/* profile */}
       <div className="space-y-4">
         <div className="rounded-md p-2 md:px-4 border h-min  md:min-h-52 ">

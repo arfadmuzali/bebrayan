@@ -7,8 +7,8 @@ import { Locale, defaultLocale } from "./config";
 // also read it from a database, backend service, or any other source.
 const COOKIE_NAME = "NEXT_LOCALE";
 
-export async function getUserLocale() {
-  return (await cookies()).get(COOKIE_NAME)?.value || defaultLocale;
+export async function getUserLocale(): Promise<Locale> {
+  return ((await cookies()).get(COOKIE_NAME)?.value || defaultLocale) as Locale;
 }
 
 export async function setUserLocale(locale: Locale) {

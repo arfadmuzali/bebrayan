@@ -49,5 +49,20 @@
     "moreInformation": "More information",
     "madeWithLove": "Made with ❤️ by Arfad Muzali",
     "websitePurpose": "This website is created for author portfolio purposes."
+  },
+  "Setting": {
+    "appearance": "Appearance",
+    "profile": "Profile",
+    "appearanceDescription": "Customize how the interface looks and feels.",
+    "profileDescription": "This is how others will see you on the platform.",
+    "save": "Save",
+    "usernameDescription": "This is your public display name.",
+    "emailDescription": "We'll never share your email with anyone else.",
+    "theme": "Theme",
+    "darkMode": "Dark mode",
+    "themeDescription": "Select your preferred theme.",
+    "language": "Language",
+    "languageDescription": "Select your favorite language.",
+    "avatarDescription": "JPG, GIF or PNG. Max size of 1MB."
   }
 }

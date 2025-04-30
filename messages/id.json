@@ -49,5 +49,20 @@
     "moreInformation": "Informasi selengkapnya",
     "madeWithLove": "Dibuat dengan ❤️ oleh Arfad Muzali",
     "websitePurpose": "Website ini dibuat untuk tujuan portfolio author."
+  },
+  "Setting": {
+    "appearance": "Tampilan",
+    "profile": "Profil",
+    "appearanceDescription": "Kustomisasi tampilan aplikasi.",
+    "profileDescription": "Ini adalah bagaimana orang melihat profil anda.",
+    "save": "Simpan",
+    "usernameDescription": "Ini adalah nama publik kamu",
+    "emailDescription": "Aplikasi tidak akan menunjukan email anda kepada siapapun.",
+    "theme": "Tema",
+    "darkMode": "Dark mode",
+    "themeDescription": "Pilih tema yang sesuai.",
+    "language": "Bahasa",
+    "languageDescription": "Pilih bahasa anda.",
+    "avatarDescription": "JPG, GIF or PNG. Ukuran maksimal 1MB."
   }
 }

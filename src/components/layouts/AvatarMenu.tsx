@@ -38,7 +38,7 @@ export default function AvatarMenu({ session }: { session?: Session | null }) {
         <DropdownMenuGroup>
           <DropdownMenuItem
             onClick={() => {
-              router.push("/setting");
+              router.push("/settings");
             }}
           >
             <LayoutDashboard />
@@ -46,7 +46,7 @@ export default function AvatarMenu({ session }: { session?: Session | null }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push("/dashboard");
+              router.push("/settings");
             }}
           >
             <SquareUser />

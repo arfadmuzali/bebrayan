@@ -54,7 +54,7 @@ export default function FollowButton({ profileId }: { profileId: string }) {
     <>
       {data?.self ? (
         <Link
-          href={"/setting"}
+          href={"/settings"}
           className={buttonVariants({ className: "text-xl font-semibold" })}
         >
           {t("edit")}
