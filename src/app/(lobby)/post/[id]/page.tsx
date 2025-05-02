@@ -1,5 +1,5 @@
-import PostButtons from "@/components/PostButtons";
-import Comment from "@/components/Comment";
+import PostButtons from "@/components/post-buttons";
+import Comment from "@/components/comment";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,7 +13,7 @@ import { ArchiveX } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
-import CommentList from "@/components/CommentList";
+import CommentList from "@/components/comment-list";
 
 interface User {
   id: string;

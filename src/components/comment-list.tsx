@@ -5,7 +5,7 @@ import axios from "axios";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { format } from "date-fns";
-import CommentSkeleton from "./skeleton/CommentSkeleton";
+import CommentSkeleton from "./skeleton/comment-skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,

@@ -1,5 +1,5 @@
-import FollowButton from "@/components/FollowButton";
-import ProfilePost from "@/components/ProfilePost";
+import FollowButton from "@/components/follow-button";
+import ProfilePost from "@/components/profile-post";
 import { Button } from "@/components/ui/button";
 import {
   Card,

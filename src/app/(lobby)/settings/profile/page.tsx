@@ -9,7 +9,7 @@ import Image from "next/image";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { profileSchema, ProfileSchema } from "@/lib/schemas/profileSchema";
+import { profileSchema, ProfileSchema } from "@/lib/schemas/profile-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { authenticator } from "@/lib/uploadAuthenticator";
+import { authenticator } from "@/lib/upload-authenticator";
 import { upload, UploadResponse } from "@imagekit/next";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;

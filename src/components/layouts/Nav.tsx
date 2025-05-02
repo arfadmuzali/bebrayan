@@ -1,11 +1,12 @@
 import Image from "next/image";
-import { Button, buttonVariants } from "../ui/button";
-import { House, Search, Send } from "lucide-react";
+import { buttonVariants } from "../ui/button";
+import { House, Send } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import TooltipWrap from "../ui/tooltip-wrap";
 import { auth } from "@/lib/auth";
-import AvatarMenu from "./AvatarMenu";
+import AvatarMenu from "./avatar-menu";
+import SearchButton from "./search-button";
 
 export default async function Nav() {
   const t = await getTranslations("Navbar");
@@ -19,6 +20,7 @@ export default async function Nav() {
               src={"/bebrayan.webp"}
               alt="Bebrayan"
               fill
+              priority
               sizes="20vw"
               className="object-cover object-center"
             />
@@ -27,10 +29,7 @@ export default async function Nav() {
             Bebrayan
           </h1>
         </Link>
-        <Button className="flex gap-4 text-lg [&_svg]:size-6">
-          <Search />
-          {t("search")}
-        </Button>
+        <SearchButton />
         <div className="flex gap-2 h-full">
           <TooltipWrap content={t("home")}>
             <Link

@@ -109,6 +109,7 @@ export default function Comment({ post }: { post: Post }) {
             placeholder={t("yourReply") + "..."}
             // className="w-full bg-transparent placeholder-gray-500 outline-none border-none text-base py-3"
           />
+
           <div className="flex w-full gap-6 items-center justify-end">
             {isCommentFocused && (
               <p

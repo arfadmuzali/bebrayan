@@ -10,7 +10,7 @@ import axios from "axios";
 import { cn } from "@/lib/utils";
 import TooltipWrap from "./ui/tooltip-wrap";
 import { useTranslations } from "next-intl";
-import PostSkeleton from "./skeleton/PostSkeleton";
+import PostSkeleton from "./skeleton/post-skeleton";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -107,6 +107,7 @@ export default function Post({
       const response = await axios.post<Repost>("/api/post/repost/" + post.id);
       return response.data;
     },
+
     onSuccess: async (data) => {
       if (data.reposted) {
         setRepostCount((prev) => prev + 1);

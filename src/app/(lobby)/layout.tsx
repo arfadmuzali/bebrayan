@@ -1,4 +1,4 @@
-import Nav from "@/components/layouts/Nav";
+import Nav from "@/components/layouts/nav";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";

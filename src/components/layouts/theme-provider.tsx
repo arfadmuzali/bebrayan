@@ -1,7 +1,7 @@
 "use client";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { ModeToggle } from "../ToggleThemeDev";
+// import { ModeToggle } from "../toggle-theme-dev";
 import { Toaster } from "../ui/sonner";
 
 export function ThemeProvider({
@@ -10,7 +10,7 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
     <NextThemesProvider {...props}>
-      {children} <ModeToggle /> <Toaster />
+      {children} <Toaster />
     </NextThemesProvider>
   );
 }

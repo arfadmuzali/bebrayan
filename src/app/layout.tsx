@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/layouts/ThemeProvider";
+import { ThemeProvider } from "@/components/layouts/theme-provider";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import ProgressBarProvider from "@/components/layouts/ProgressBarProvider";
+import ProgressBarProvider from "@/components/layouts/progress-sidebar";
 import { SessionProvider } from "next-auth/react";
-import QueryProvider from "@/components/layouts/QueryProvider";
+import QueryProvider from "@/components/layouts/query-provider";
 import { auth } from "@/lib/auth";
 
 const nunito = Nunito({

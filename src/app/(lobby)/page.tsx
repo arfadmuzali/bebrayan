@@ -6,7 +6,7 @@ import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import CreatePost from "@/components/CreatePost";
+import CreatePost from "@/components/create-post";
 import { useTranslations } from "next-intl";
 import {
   Collapsible,

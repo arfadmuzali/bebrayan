@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { LoadingSpinner } from "./ui/loading-spinner";
-import Post from "./Post";
+import Post from "./post";
 
 interface Post {
   id: string;

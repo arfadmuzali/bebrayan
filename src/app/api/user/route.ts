@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { profileSchema } from "@/lib/schemas/profileSchema";
+import { profileSchema } from "@/lib/schemas/profile-schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET() {

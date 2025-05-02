@@ -10,12 +10,12 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="mx-auto grid grid-cols-1 w-full lg:grid-cols-4 max-w-screen-2xl gap-5  px-0 md:px-12 lg:px-16">
-      <div className="col-span-1 space-y-2">
+    <div className="mx-auto grid grid-cols-1 w-full md:grid-cols-1 lg:grid-cols-4 max-w-screen-2xl gap-5 px-0 md:px-12 lg:px-16">
+      <div className="lg:col-span-1 flex lg:flex-col flex-row gap-2 w-full p-2 md:p-0">
         <Link
           href={"/settings/profile"}
           className={cn(
-            "flex items-center justify-start px-4 py-2 text-sm font-medium rounded-md transition-colors",
+            "flex items-center w-full justify-start px-4 py-2 text-sm font-medium rounded-md transition-colors",
             pathname.includes("profile")
               ? "bg-primary text-primary-foreground"
               : "bg-muted hover:bg-muted/80 text-foreground"
@@ -27,7 +27,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
         <Link
           href={"/settings/appearance"}
           className={cn(
-            "flex items-center justify-start px-4 py-2 text-sm font-medium rounded-md transition-colors",
+            "flex items-center w-full justify-start px-4 py-2 text-sm font-medium rounded-md transition-colors",
             pathname.includes("appearance")
               ? "bg-primary text-primary-foreground"
               : "bg-muted hover:bg-muted/80 text-foreground"
@@ -37,7 +37,7 @@ export default function SettingsLayout({ children }: { children: ReactNode }) {
           Appearance
         </Link>
       </div>
-      <div className="col-span-3">{children}</div>
+      <div className="lg:col-span-3">{children}</div>
     </div>
   );
 }
