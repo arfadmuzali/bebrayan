@@ -21,13 +21,43 @@ import {
   CommandList,
 } from "../ui/command";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import { CommandLoading } from "cmdk";
+import { useRouter } from "next/navigation";
 // import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 
+export interface User {
+  id: string;
+  image: string;
+  name: string;
+}
+
 export default function SearchButton() {
+  const router = useRouter();
   const t = useTranslations("Navbar");
-  // const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const { data: users, isLoading: isSearchLoading } = useQuery({
+    queryKey: ["search", search],
+    queryFn: async () => {
+      const response = await axios.get<User[]>(
+        `/api/user?name=${search}&take=10`
+      );
+      return response.data;
+    },
+    enabled: !!search,
+  });
+  console.log(users);
+
+  const handleSearch = debounce((value: string) => {
+    setSearch(value);
+  }, 400);
+
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button>
           <Search /> {t("search")}
@@ -38,29 +68,54 @@ export default function SearchButton() {
           <DialogTitle></DialogTitle>
           <DialogDescription></DialogDescription>
         </VisuallyHidden>
-        <Command className="rounded-lg border shadow-md md:min-w-[450px]">
+        <Command
+          shouldFilter={false}
+          className="rounded-lg border shadow-md md:min-w-[450px]"
+        >
           <div className="border-b flex gap-2 items-center w-full">
-            <CommandInput className="w-full" placeholder="Search user..." />
+            <CommandInput
+              className="w-full"
+              // value={search}
+
+              onValueChange={(e) => {
+                handleSearch(e);
+              }}
+              placeholder="Search user..."
+            />
             <DialogClose className="px-2">
               <X />
             </DialogClose>
           </div>
-          <CommandList>
+          <CommandList className="min-h-[300px]">
+            {isSearchLoading && (
+              <CommandLoading className="text-sm p-4 text-center">
+                Hang on...
+              </CommandLoading>
+            )}
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              <CommandItem
-                onSelect={() => {
-                  console.log("hehe");
-                }}
-              >
-                <div className="relative">
-                  <Image src={"/arfad.webp"} alt="hehe" fill />
-                </div>
-                <span>Calendar</span>
-              </CommandItem>
-              <CommandItem>
-                <span>Search Emoji</span>
-              </CommandItem>
+              {users?.map((user) => {
+                return (
+                  <CommandItem
+                    key={user.id}
+                    onSelect={() => {
+                      router.push("/profile/" + user.id);
+                      setDialogOpen(false);
+                    }}
+                  >
+                    <div className="relative h-8 w-8 rounded-full">
+                      <Image
+                        src={user.image ?? "/avatar-placeholder.svg"}
+                        alt={user.name}
+                        fill
+                        sizes="2rem"
+                        className="rounded-full"
+                      />
+                    </div>
+                    <span>{user.name}</span>
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
           </CommandList>
         </Command>

@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id            String          @id @default(cuid())
-  name          String?
+  name          String?          @db.VarChar(60)
   email         String          @unique
   bio           String?         @db.VarChar(200)
   emailVerified DateTime?
@@ -34,6 +34,9 @@ model User {
   posts    Post[]
   likes    Like[]
   comments Comment[]
+  
+  messages Message[]
+  chats   ChatUser[]
 
   @@index([name])
 }
@@ -85,6 +88,42 @@ model Follows {
 
   @@id([followerId, followingId])
 }
+
+
+model Chat {
+  id String @id @default(uuid())
+  messages Message[]
+  users ChatUser[]
+
+  updatedAt DateTime @updatedAt
+}
+
+model ChatUser {
+  id String @id @default(cuid())
+
+  chatId String
+  chat Chat @relation(fields: [chatId], references: [id])
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([chatId, userId])
+}
+
+model Message {
+  id String @id @default(cuid())
+  content String
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  chatId String
+  chat Chat @relation(fields: [chatId], references: [id])
+
+  createdAt DateTime @default(now())
+
+}
+
+
 
 model Account {
   userId            String

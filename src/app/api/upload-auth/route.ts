@@ -17,6 +17,7 @@ export async function GET() {
       );
     }
 
+
     const uploadParams = getUploadAuthParams({
       privateKey: process.env.UPLOAD_PRIVATE_KEY!,
       publicKey: process.env.NEXT_PUBLIC_UPLOAD_PUBLIC_KEY!,

@@ -46,7 +46,7 @@ export default function AvatarMenu({ session }: { session?: Session | null }) {
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => {
-              router.push("/settings");
+              router.push("/profile/" + session?.user?.id);
             }}
           >
             <SquareUser />
