@@ -112,7 +112,7 @@ model ChatUser {
 
 model Message {
   id String @id @default(cuid())
-  content String
+  content String @db.VarChar(50)
 
   userId String
   user User @relation(fields: [userId], references: [id])

@@ -44,7 +44,7 @@ export default async function Nav() {
           </TooltipWrap>
           <TooltipWrap content={t("messages")}>
             <Link
-              href={"/"}
+              href={"/message"}
               className={buttonVariants({
                 variant: "ghost",
                 className: "[&_svg]:size-6 h-full",
