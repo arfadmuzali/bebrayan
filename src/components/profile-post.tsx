@@ -6,28 +6,34 @@ import { LoadingSpinner } from "./ui/loading-spinner";
 // import Post from "./post";
 import Post from "./post";
 
-interface Post {
+export interface Post {
   id: string;
   content: string;
   createdAt: Date;
   userId: string;
-  originalPostId: null | string;
+  originalPostId: string | null;
   user: User;
   _count: Count;
-  originalPost?: Post | null;
+  originalPost: Post | null;
+  likes: {
+    id: string;
+  }[];
+  reposts: {
+    id: string;
+  }[];
 }
 
-interface Count {
+export interface Count {
   comments: number;
   likes: number;
   reposts: number;
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
-  bio: null;
+  bio: string;
   emailVerified: null;
   image: string;
   createdAt: Date;

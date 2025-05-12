@@ -5,12 +5,12 @@ import { format } from "date-fns";
 import { Ellipsis, Heart, MessageCircle, Repeat2, Share } from "lucide-react";
 import debounce from "lodash.debounce";
 import { useMemo, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import TooltipWrap from "./ui/tooltip-wrap";
 import { useTranslations } from "next-intl";
-import PostSkeleton from "./skeleton/post-skeleton";
+// import PostSkeleton from "./skeleton/post-skeleton";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -22,36 +22,33 @@ import {
 import { LoadingSpinner } from "./ui/loading-spinner";
 import { useSession } from "next-auth/react";
 
-interface Post {
+export interface Post {
   id: string;
-  content: string;
+  content: string | null;
   createdAt: Date;
   userId: string;
-  originalPostId: null | string;
+  originalPostId: string | null;
   user: User;
   _count: Count;
-  originalPost?: Post | null;
+  originalPost: Post | null;
+  likes: {
+    id: string;
+  }[];
+  reposts: {
+    id: string;
+  }[];
 }
 
-interface Count {
+export interface Count {
   comments: number;
   likes: number;
   reposts: number;
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
-  email: string;
-  bio: null;
-  emailVerified: null;
   image: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface Like {
-  isUserLiked: boolean;
 }
 
 interface Repost {
@@ -71,20 +68,16 @@ export default function Post({
 
   const { data: session } = useSession();
 
+  const [isUserLiked, setIsUserLiked] = useState(!!post?.likes?.length);
+  const [isUserReposted, setIsUserReposted] = useState(!!post?.reposts?.length);
+
   const [likesCount, setLikesCount] = useState(post._count.likes);
   const [repostCount, setRepostCount] = useState(post._count.reposts);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["likes", post.id],
-    queryFn: async () => {
-      const response = await axios.get<Like>("/api/post/like/" + post.id);
-      return response.data;
-    },
-  });
   const likeMutation = useMutation({
     mutationFn: async () => {
       await axios.post(`/api/post/like/${post.id}`, {
-        like: data?.isUserLiked,
+        like: !!isUserLiked,
       });
     },
   });
@@ -93,14 +86,6 @@ export default function Post({
     () => debounce(likeMutation.mutate, 500),
     [likeMutation.mutate]
   );
-
-  const { data: repostData, isLoading: repostIsLoading } = useQuery({
-    queryKey: ["repostPost", post.id],
-    queryFn: async () => {
-      const response = await axios.get<Repost>("/api/post/repost/" + post.id);
-      return response.data;
-    },
-  });
 
   const repostMutation = useMutation({
     mutationFn: async () => {
@@ -114,6 +99,7 @@ export default function Post({
       } else {
         setRepostCount((prev) => prev - 1);
       }
+      setIsUserReposted((prev) => !prev);
 
       queryClient.setQueryData(
         ["profilePost", session?.user?.id],
@@ -129,14 +115,18 @@ export default function Post({
               id: "hehe jangan di intip dong idnya " + post.id,
               originalPost: post,
               originalPostId: post.id,
+              _count: {
+                ...post._count,
+                likes: likesCount,
+                reposts: repostCount,
+              },
+              reposts: isUserReposted ? [{ id: session?.user?.id ?? "" }] : [],
+              likes: isUserLiked ? [{ id: session?.user?.id ?? "" }] : [],
             };
             return [newRepost, ...oldData];
           }
         }
       );
-      queryClient.setQueryData(["repostPost", post.id], () => {
-        return data;
-      });
     },
   });
 
@@ -154,10 +144,6 @@ export default function Post({
       );
     },
   });
-
-  if (isLoading || repostIsLoading) {
-    return <PostSkeleton />;
-  }
 
   return (
     <div className="flex flex-col gap-2 py-4  mx-auto max-w-screen-2xl">
@@ -177,7 +163,7 @@ export default function Post({
       <div className="flex  justify-between items-center">
         <div className="flex gap-4">
           <Link href={"/profile/" + post.user?.id}>
-            <Avatar className="h-12 w-12">
+            <Avatar className="h-10 w-10">
               <AvatarImage
                 src={post.user?.image ?? "/avatar-placeholder.svg"}
                 alt="Av"
@@ -187,12 +173,12 @@ export default function Post({
           </Link>
           <div className="flex gap-4 items-center">
             <Link href={"/profile/" + post.user?.id}>
-              <h2 className="font-semibold text-lg">{post.user.name}</h2>
+              <h2 className="font-semibold">{post.user.name}</h2>
             </Link>
             <div className="grid place-items-center">
               <div className="bg-muted-foreground h-1 w-1 rounded-full" />
             </div>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {format(new Date(post.createdAt), "MMMM dd")}
             </p>
           </div>
@@ -251,7 +237,7 @@ export default function Post({
                 <button
                   className={cn(
                     "flex items-center gap-1  font-semibold",
-                    repostData?.reposted && "text-primary"
+                    isUserReposted && "text-primary"
                   )}
                 >
                   <Repeat2 className="h-5 w-5 " />
@@ -277,7 +263,7 @@ export default function Post({
                       <span className="flex gap-1 items-center">
                         <Repeat2 />
 
-                        {repostData?.reposted ? t("cancelRepost") : t("repost")}
+                        {isUserReposted ? t("cancelRepost") : t("repost")}
                       </span>
                     )}
                   </button>
@@ -290,31 +276,29 @@ export default function Post({
               <button
                 onClick={() => {
                   debounceLikeMutate();
-                  if (data?.isUserLiked) {
+                  if (isUserLiked) {
                     setLikesCount((prev) => prev - 1);
                   } else {
                     setLikesCount((prev) => prev + 1);
                   }
-                  queryClient.setQueryData(
-                    ["likes", post.id],
-                    (oldData: Like) => {
-                      return {
-                        ...oldData,
-                        isUserLiked: !data?.isUserLiked,
-                      };
-                    }
-                  );
+                  setIsUserLiked((prev) => !prev);
+                  // queryClient.setQueryData(
+                  //   ["likes", post.id],
+                  //   (oldData: Like) => {
+                  //     return {
+                  //       ...oldData,
+                  //       isUserLiked: !isUserLiked,
+                  //     };
+                  //   }
+                  // );
                 }}
                 className={cn(
                   "flex items-center gap-1 font-semibold",
-                  data?.isUserLiked && "text-red-500"
+                  isUserLiked && "text-red-500"
                 )}
               >
                 <Heart
-                  className={cn(
-                    data?.isUserLiked && "fill-red-500 ",
-                    " h-5 w-5"
-                  )}
+                  className={cn(isUserLiked && "fill-red-500 ", " h-5 w-5")}
                 />
 
                 <span>{likesCount}</span>

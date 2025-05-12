@@ -48,7 +48,8 @@
   "Info": {
     "moreInformation": "Informasi selengkapnya",
     "madeWithLove": "Dibuat dengan ❤️ oleh Arfad Muzali",
-    "websitePurpose": "Website ini dibuat untuk tujuan portfolio author."
+    "websitePurpose": "Website ini dibuat untuk tujuan portfolio author.",
+    "fetchMorePost": "Tampilkan lebih banyak postingan"
   },
   "Setting": {
     "appearance": "Tampilan",
@@ -64,5 +65,8 @@
     "language": "Bahasa",
     "languageDescription": "Pilih bahasa anda.",
     "avatarDescription": "JPG, GIF or PNG. Ukuran maksimal 1MB."
+  },
+  "Message": {
+    "defaultDescription": "Pilih chat di sidebar."
   }
 }

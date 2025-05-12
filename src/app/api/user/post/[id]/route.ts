@@ -1,3 +1,4 @@
+import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -6,6 +7,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth();
+
     const { id } = await params;
 
     const posts = await prisma.post.findMany({
@@ -16,7 +19,13 @@ export async function GET(
         userId: id,
       },
       include: {
-        user: true,
+        user: {
+          select: {
+            image: true,
+            id: true,
+            name: true,
+          },
+        },
         _count: {
           select: {
             comments: true,
@@ -34,6 +43,38 @@ export async function GET(
                 reposts: true,
               },
             },
+            likes: {
+              where: {
+                userId: session?.user?.id,
+              },
+              select: {
+                id: true,
+              },
+            },
+            reposts: {
+              where: {
+                userId: session?.user?.id,
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+        likes: {
+          where: {
+            userId: session?.user?.id,
+          },
+          select: {
+            id: true,
+          },
+        },
+        reposts: {
+          where: {
+            userId: session?.user?.id,
+          },
+          select: {
+            id: true,
           },
         },
       },

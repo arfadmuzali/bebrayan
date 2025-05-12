@@ -48,7 +48,8 @@
   "Info": {
     "moreInformation": "More information",
     "madeWithLove": "Made with ❤️ by Arfad Muzali",
-    "websitePurpose": "This website is created for author portfolio purposes."
+    "websitePurpose": "This website is created for author portfolio purposes.",
+    "fetchMorePost": "Fetch more post"
   },
   "Setting": {
     "appearance": "Appearance",
@@ -64,5 +65,8 @@
     "language": "Language",
     "languageDescription": "Select your favorite language.",
     "avatarDescription": "JPG, GIF or PNG. Max size of 1MB."
+  },
+  "Message": {
+    "defaultDescription": "Select chat on the sidebar."
   }
 }

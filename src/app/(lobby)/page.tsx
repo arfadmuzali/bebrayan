@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { User } from "@prisma/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,6 +23,41 @@ import {
   Mail,
 } from "lucide-react";
 import Image from "next/image";
+import Post from "@/components/post";
+export interface Feed {
+  data: Post[];
+  hasNextPage: boolean;
+  nextCursor: string;
+}
+
+export interface Post {
+  id: string;
+  content: string | null;
+  createdAt: Date;
+  userId: string;
+  originalPostId: string | null;
+  user: UserPost;
+  _count: Count;
+  originalPost: Post | null;
+  likes: {
+    id: string;
+  }[];
+  reposts: {
+    id: string;
+  }[];
+}
+
+export interface Count {
+  comments: number;
+  likes: number;
+  reposts: number;
+}
+
+export interface UserPost {
+  id: string;
+  name: string;
+  image: string;
+}
 
 export default function HomePage() {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
@@ -37,10 +72,24 @@ export default function HomePage() {
     staleTime: 300000,
   });
 
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    queryKey: ["posts"],
+    queryFn: async ({ pageParam }) => {
+      const response = await axios.get<Feed>(
+        `/api/post?take=2&cursor=${pageParam}`
+      );
+      return response.data;
+    },
+
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => {
+      return lastPage.nextCursor;
+    },
+  });
   return (
     <div className="mx-auto grid grid-cols-1 lg:grid-cols-4 max-w-screen-2xl gap-5 px-0 md:px-12 lg:px-16">
       {/* profile */}
-      <div className="space-y-4">
+      <div className="space-y-4 md:sticky top-4 h-fit">
         <div className="rounded-md p-2 md:px-4 border h-min  md:min-h-52 ">
           {userIsLoading ? (
             <div className="w-full flex items-center justify-center h-full">
@@ -134,8 +183,42 @@ export default function HomePage() {
       </div>
 
       {/* main feed */}
-      <div className="lg:col-span-3 rounded-md">
+      <div className="lg:col-span-3 space-y-4 rounded-md">
         <CreatePost />
+        <div className="flex flex-col w-full border rounded-md">
+          {data?.pages?.map((group, i) => {
+            return (
+              <div className="w-full" key={i}>
+                {group.data.map((post) => {
+                  return (
+                    <div key={post.id} className="border-b px-4">
+                      {post.originalPost ? (
+                        <Post
+                          post={post.originalPost}
+                          repostedByUser={post.user}
+                        />
+                      ) : (
+                        <Post post={post} />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-center w-full">
+          {hasNextPage && (
+            <button
+              className="p-4"
+              onClick={() => {
+                fetchNextPage();
+              }}
+            >
+              {t("fetchMorePost")}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

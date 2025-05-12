@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id            String          @id @default(cuid())
-  name          String?          @db.VarChar(60)
+  name          String?         @db.VarChar(60)
   email         String          @unique
   bio           String?         @db.VarChar(200)
   emailVerified DateTime?
@@ -34,9 +34,11 @@ model User {
   posts    Post[]
   likes    Like[]
   comments Comment[]
-  
+
+  chats1 Chat[] @relation("user1Conversation")
+  chats2 Chat[] @relation("user2Conversation")
+
   messages Message[]
-  chats   ChatUser[]
 
   @@index([name])
 }
@@ -89,41 +91,33 @@ model Follows {
   @@id([followerId, followingId])
 }
 
-
 model Chat {
   id String @id @default(uuid())
+
+  user1   User   @relation("user1Conversation", fields: [user1Id], references: [id])
+  user1Id String
+
+  user2   User   @relation("user2Conversation", fields: [user2Id], references: [id])
+  user2Id String
+
   messages Message[]
-  users ChatUser[]
-
-  updatedAt DateTime @updatedAt
-}
-
-model ChatUser {
-  id String @id @default(cuid())
-
-  chatId String
-  chat Chat @relation(fields: [chatId], references: [id])
-
-  userId String
-  user User @relation(fields: [userId], references: [id])
-
-  @@unique([chatId, userId])
-}
-
-model Message {
-  id String @id @default(cuid())
-  content String @db.VarChar(50)
-
-  userId String
-  user User @relation(fields: [userId], references: [id])
-  chatId String
-  chat Chat @relation(fields: [chatId], references: [id])
 
   createdAt DateTime @default(now())
 
+  @@unique([user1Id, user2Id])
 }
 
+model Message {
+  id      String  @id @default(cuid())
+  content String  @db.VarChar(100)
+  userId  String
+  user    User    @relation(fields: [userId], references: [id])
+  chatId  String
+  chat    Chat    @relation(fields: [chatId], references: [id])
+  isRead  Boolean @default(false)
 
+  createdAt DateTime @default(now())
+}
 
 model Account {
   userId            String
