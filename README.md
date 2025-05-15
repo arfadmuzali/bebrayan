@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# [Bebrayan](https://bebrayan.vercel.app/)
 
-## Getting Started
+Bebrayan is a text-based social media platform similar to the old Twitter, designed to help people connect and share their thoughts easily and openly.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Framework:** [Next.js](https://nextjs.org)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com)
+- **Authentication:** [Auth.js](https://authjs.dev)
+- **ORM:** [Prisma](https://www.prisma.io)
+- **File Uploads:** [Imagekit](https://imagekit.io)
+- **Realtime:** [Pusher](https://pusher.com)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## TODOs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [ ] Set feed count to **10 posts** per load
+- [ ] Implement **optimistic update** when creating a new post
+- [ ] Add an **ID** attribute to the **information section **in the **author profile**
+- [ ] Show **recommended users** when using **Search User**
+- [ ] Implement **real-time chat** feature
+- [ ] Show **followers list** and **following list** on the profile page
+- [ ] Add **detailed post date** display (e.g., "15 May 2025, 14:30")
+- [ ] Create appropriate **meta tags** for **each page**
+- [ ] Implement **optimistic update** when deleting post on feed
+- [ ] Add **notification feature**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Instalation
 
-## Learn More
+If you see this repo, i consider you are a good programmer.Do the installation yourself, you can look at .env.example for inspiration
 
-To learn more about Next.js, take a look at the following resources:
+## Lisence
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project has no lisence. You can copy this project as you want
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Info
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you have any question, just chat me at [Linkedin](https://www.linkedin.com/in/arfad-muzali-91a16a2a7/) or [Email](mailto:arfadmuzali258@gmail.com)
