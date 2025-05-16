@@ -13,9 +13,9 @@ Bebrayan is a text-based social media platform similar to the old Twitter, desig
 
 ## TODOs
 
-- [ ] Set feed count to **10 posts** per load
-- [ ] Implement **optimistic update** when creating a new post
-- [ ] Add an **ID** attribute to the **information section **in the **author profile**
+- [x] Set feed count to **10 posts** per load
+- [x] Implement **optimistic update** when creating a new post
+- [x] Add an **ID** attribute to the **information section **in the **author profile**
 - [ ] Show **recommended users** when using **Search User**
 - [ ] Implement **real-time chat** feature
 - [ ] Show **followers list** and **following list** on the profile page

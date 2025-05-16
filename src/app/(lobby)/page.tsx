@@ -76,7 +76,7 @@ export default function HomePage() {
     queryKey: ["posts"],
     queryFn: async ({ pageParam }) => {
       const response = await axios.get<Feed>(
-        `/api/post?take=2&cursor=${pageParam}`
+        `/api/post?take=10&cursor=${pageParam}`
       );
       return response.data;
     },
@@ -134,7 +134,7 @@ export default function HomePage() {
                 <div className="flex gap-4 text-xs items-center justify-center">
                   <Link
                     className="text-muted-foreground hover:text-foreground"
-                    href={"/profile/"}
+                    href={"/profile/cmano386g0000jr043ytfa1ec"}
                   >
                     <div className="relative h-5 w-5 rounded-full">
                       <Image

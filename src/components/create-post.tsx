@@ -7,13 +7,19 @@ import { AutoResizeTextarea } from "./ui/textarea";
 import { useTranslations } from "next-intl";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 import { LoadingSpinner } from "./ui/loading-spinner";
+import { Feed } from "@/app/(lobby)/page";
 
 export default function CreatePost() {
+  const queryClient = useQueryClient();
   const t = useTranslations("Post");
   const { data: session } = useSession();
   const limitPost = 320;
@@ -31,6 +37,21 @@ export default function CreatePost() {
     },
     onError: async (error) => {
       toast.error(error.message);
+    },
+    onSuccess: async (data) => {
+      queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
+        if (!oldData) return oldData;
+        console.log(oldData);
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page, i) => {
+            if (i == 0) {
+              return { ...page, data: [data, ...page.data] };
+            }
+            return page;
+          }),
+        };
+      });
     },
     onSettled: () => {
       setPost("");

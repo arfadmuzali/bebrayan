@@ -50,9 +50,60 @@ export async function POST(req: NextRequest) {
       include: {
         user: {
           select: {
+            image: true,
             id: true,
             name: true,
-            image: true,
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+            likes: true,
+            reposts: true,
+          },
+        },
+        originalPost: {
+          include: {
+            user: true,
+            _count: {
+              select: {
+                comments: true,
+                likes: true,
+                reposts: true,
+              },
+            },
+            likes: {
+              where: {
+                userId: session?.user?.id,
+              },
+              select: {
+                id: true,
+              },
+            },
+            reposts: {
+              where: {
+                userId: session?.user?.id,
+              },
+              select: {
+                id: true,
+              },
+            },
+          },
+        },
+        likes: {
+          where: {
+            userId: session?.user?.id,
+          },
+          select: {
+            id: true,
+          },
+        },
+        reposts: {
+          where: {
+            userId: session?.user?.id,
+          },
+          select: {
+            id: true,
           },
         },
       },
