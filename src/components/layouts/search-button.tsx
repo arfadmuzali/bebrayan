@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
@@ -26,7 +26,6 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import { CommandLoading } from "cmdk";
 import { useRouter } from "next/navigation";
-// import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 
 export interface User {
   id: string;
@@ -48,13 +47,24 @@ export default function SearchButton() {
       );
       return response.data;
     },
-    enabled: !!search,
+    enabled: dialogOpen,
   });
-  console.log(users);
 
   const handleSearch = debounce((value: string) => {
     setSearch(value);
   }, 400);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "/" && !dialogOpen) {
+        e.preventDefault();
+        setDialogOpen(true);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [dialogOpen]);
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -75,8 +85,6 @@ export default function SearchButton() {
           <div className="border-b flex gap-2 items-center w-full">
             <CommandInput
               className="w-full"
-              // value={search}
-
               onValueChange={(e) => {
                 handleSearch(e);
               }}

@@ -48,6 +48,9 @@ export async function GET(req: NextRequest) {
     }
     const users = await prisma.user.findMany({
       take: requestParams.take,
+      orderBy: {
+        followers: { _count: "asc" },
+      },
       where: {
         name: {
           contains: requestParams.name,

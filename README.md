@@ -15,8 +15,8 @@ Bebrayan is a text-based social media platform similar to the old Twitter, desig
 
 - [x] Set feed count to **10 posts** per load
 - [x] Implement **optimistic update** when creating a new post
-- [x] Add an **ID** attribute to the **information section **in the **author profile**
-- [ ] Show **recommended users** when using **Search User**
+- [x] Add an **ID** attribute to the **information section** in the **author profile**
+- [x] Show **recommended users** when using **Search User**
 - [ ] Implement **real-time chat** feature
 - [ ] Show **followers list** and **following list** on the profile page
 - [ ] Add **detailed post date** display (e.g., "15 May 2025, 14:30")
@@ -26,7 +26,7 @@ Bebrayan is a text-based social media platform similar to the old Twitter, desig
 
 ## Instalation
 
-If you see this repo, i consider you are a good programmer.Do the installation yourself, you can look at .env.example for inspiration
+If you see this repo, i consider you are a good programmer. Do the installation yourself, you can look at .env.example for inspiration
 
 ## Lisence
 
