@@ -32,7 +32,6 @@ export default function CreatePost() {
       const response = await axios.post("/api/post", {
         content: post,
       });
-      console.log(response.data);
       return response.data;
     },
     onError: async (error) => {
@@ -41,7 +40,6 @@ export default function CreatePost() {
     onSuccess: async (data) => {
       queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
         if (!oldData) return oldData;
-        console.log(oldData);
         return {
           ...oldData,
           pages: oldData.pages.map((page, i) => {

@@ -84,8 +84,6 @@ export default function ProfileSettingPage() {
         username: data.username,
       });
 
-      console.log(response);
-
       return response.data;
     },
     onSuccess: async () => {

@@ -1,4 +1,6 @@
 import FollowButton from "@/components/follow-button";
+import FollowerButton from "@/components/follower-button";
+import FollowingButton from "@/components/following-button";
 import ProfilePost from "@/components/profile-post";
 import { Button } from "@/components/ui/button";
 import {
@@ -77,7 +79,7 @@ export default async function Profile({
       <div className="mx-auto max-w-screen-2xl px-2 md:px-12 lg:px-16">
         <div className="flex justify-between">
           <div className="flex md:gap-16 gap-4 items-center">
-            <div className="relative md:h-40 md:w-40 h-20 w-20 rounded-full border">
+            <div className="relative lg:h-40 lg:w-40 md: md:w-28 md:h-28 sm:h-20 sm:w-20 h-14 w-14 rounded-full border">
               <Image
                 src={profile.image ?? "/avatar-placeholder.svg"}
                 alt={profile.name + "image"}
@@ -102,10 +104,18 @@ export default async function Profile({
         </div>
         <div className="flex items-center justify-center md:justify-start mt-6 md:gap-10 gap-6 md:text-xl ">
           <div>
-            {profile._count.followings} {t("followers")}
+            <FollowerButton id={profile.id}>
+              <div>
+                {profile._count.followings} {t("followers")}
+              </div>
+            </FollowerButton>
           </div>
           <div>
-            {profile._count.followers} {t("following")}
+            <FollowingButton id={profile.id}>
+              <div>
+                {profile._count.followers} {t("following")}
+              </div>
+            </FollowingButton>
           </div>
           <div>
             {profile._count.posts} {t("posts")}

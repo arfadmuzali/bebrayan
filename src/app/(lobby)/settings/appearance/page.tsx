@@ -14,12 +14,9 @@ export default function AppearanceSettingPage() {
   const [locale, setLocale] = useState<Locale>("en");
   const { setTheme, theme } = useTheme();
 
-  console.log(theme);
-
   useEffect(() => {
     const lang = async () => {
       const result = await getUserLocale();
-      console.log(result);
       setLocale(result);
     };
 
