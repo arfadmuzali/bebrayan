@@ -5,7 +5,11 @@ import { format } from "date-fns";
 import { Ellipsis, Heart, MessageCircle, Repeat2, Share } from "lucide-react";
 import debounce from "lodash.debounce";
 import { useMemo, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import TooltipWrap from "./ui/tooltip-wrap";
@@ -21,6 +25,7 @@ import {
 } from "./ui/dropdown-menu";
 import { LoadingSpinner } from "./ui/loading-spinner";
 import { useSession } from "next-auth/react";
+import { Feed } from "@/app/(lobby)/page";
 
 export interface Post {
   id: string;
@@ -133,6 +138,7 @@ export default function Post({
   const deletePost = useMutation({
     mutationFn: async () => {
       const response = await axios.delete(`/api/post/${post.id}`);
+      console.log(response);
       return response.data;
     },
     onSuccess: async () => {
@@ -142,6 +148,20 @@ export default function Post({
           return oldData.filter((oldPost) => oldPost.id !== post.id);
         }
       );
+    },
+    onSettled: () => {
+      queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => {
+            return {
+              ...page,
+              data: page.data.filter((val) => val.id !== post.id),
+            };
+          }),
+        };
+      });
     },
   });
 
