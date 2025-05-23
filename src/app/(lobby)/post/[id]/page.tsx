@@ -127,7 +127,7 @@ export default async function Post({
           </div>
           <div>
             <h5 className="text-muted-foreground">
-              {format(new Date(post.createdAt), "yyy MMMM dd")}
+              {format(new Date(post.createdAt), "KK.mm a · dd MMMM yyyy")}
             </h5>
           </div>
         </div>
