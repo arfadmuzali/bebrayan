@@ -52,7 +52,9 @@
     "fetchMorePost": "Tampilkan lebih banyak postingan",
     "sortBy": "Sortir Berdasarkan",
     "following": "Mengikuti",
-    "newest": "Terbaru"
+    "newest": "Terbaru",
+    "notFound": "Halaman tidak ditemukan",
+    "backToHome": "Kembali ke Halaman Utama"
   },
   "Setting": {
     "appearance": "Tampilan",

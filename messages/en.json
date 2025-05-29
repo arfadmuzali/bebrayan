@@ -52,7 +52,9 @@
     "fetchMorePost": "Fetch more post",
     "sortBy": "Sort By",
     "following": "Following",
-    "newest": "Newest"
+    "newest": "Newest",
+    "notFound": "Page not found",
+    "backToHome": "Back to Home"
   },
   "Setting": {
     "appearance": "Appearance",

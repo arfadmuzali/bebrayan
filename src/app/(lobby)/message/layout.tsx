@@ -45,6 +45,7 @@ export default function MessageLayout({ children }: { children: ReactNode }) {
     },
   });
 
+  console.log(chats);
   return (
     <div className="max-w-screen-2xl mx-auto px-2 md:px-12 lg:px-16 md:h-[85vh] h-[80vh]">
       <Sheet open={isContactOpen} onOpenChange={setIsContactOpen}>

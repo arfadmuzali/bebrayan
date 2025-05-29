@@ -22,10 +22,10 @@ export async function GET() {
       where: {
         OR: [
           {
-            user1Id: "cma7vmu3l0000fdlngvmbfwvt",
+            user1Id: session.user.id,
           },
           {
-            user2Id: "cma7vmu3l0000fdlngvmbfwvt",
+            user2Id: session.user.id,
           },
         ],
       },
