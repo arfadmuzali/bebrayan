@@ -14,6 +14,7 @@ import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import Link from "next/link";
 import CommentList from "@/components/comment-list";
+import { Metadata } from "next";
 
 interface User {
   id: string;
@@ -65,6 +66,27 @@ async function getPost(id: string) {
   } catch {
     return null;
   }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+
+  const post = await prisma.post.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      content: true,
+    },
+  });
+
+  return {
+    title: `${post?.content} - Bebrayan`,
+  };
 }
 
 export default async function Post({
