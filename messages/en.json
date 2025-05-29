@@ -49,7 +49,10 @@
     "moreInformation": "More information",
     "madeWithLove": "Made with ❤️ by Arfad Muzali",
     "websitePurpose": "This website is created for author portfolio purposes.",
-    "fetchMorePost": "Fetch more post"
+    "fetchMorePost": "Fetch more post",
+    "sortBy": "Sort By",
+    "following": "Following",
+    "newest": "Newest"
   },
   "Setting": {
     "appearance": "Appearance",

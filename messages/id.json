@@ -49,7 +49,10 @@
     "moreInformation": "Informasi selengkapnya",
     "madeWithLove": "Dibuat dengan ❤️ oleh Arfad Muzali",
     "websitePurpose": "Website ini dibuat untuk tujuan portfolio author.",
-    "fetchMorePost": "Tampilkan lebih banyak postingan"
+    "fetchMorePost": "Tampilkan lebih banyak postingan",
+    "sortBy": "Sortir Berdasarkan",
+    "following": "Mengikuti",
+    "newest": "Terbaru"
   },
   "Setting": {
     "appearance": "Tampilan",

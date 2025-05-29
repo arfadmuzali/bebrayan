@@ -24,6 +24,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Post from "@/components/post";
+import useFollowedPost from "@/hooks/use-followed-post";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenuGroup,
+  DropdownMenuItem,
+} from "@radix-ui/react-dropdown-menu";
 export interface Feed {
   data: Post[];
   hasNextPage: boolean;
@@ -61,6 +71,7 @@ export interface UserPost {
 
 export default function HomePage() {
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
+  const { setIsFollowedPost, isFollowedPost } = useFollowedPost();
 
   const t = useTranslations("Info");
   const { data: user, isLoading: userIsLoading } = useQuery({
@@ -73,10 +84,12 @@ export default function HomePage() {
   });
 
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", isFollowedPost],
     queryFn: async ({ pageParam }) => {
       const response = await axios.get<Feed>(
-        `/api/post?take=10&cursor=${pageParam}`
+        `/api/post?take=10&cursor=${pageParam}&follow=${
+          isFollowedPost === "following"
+        }`
       );
       return response.data;
     },
@@ -185,6 +198,36 @@ export default function HomePage() {
       {/* main feed */}
       <div className="lg:col-span-3 space-y-4 rounded-md">
         <CreatePost />
+        <div className="flex gap-2 w-full items-center md:p-0 p-1">
+          <div className="border-t border-muted-foreground flex-1"></div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="text-xs w-max flex gap-1 items-center ">
+                {t("sortBy")} -
+                <span className="font-bold text-sm flex items-center">
+                  {" "}
+                  {t(isFollowedPost)} <ChevronDown className="w-5 h-5" />
+                </span>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-20 text-sm ">
+              <DropdownMenuGroup>
+                <DropdownMenuItem
+                  onClick={() => setIsFollowedPost("following")}
+                  className="p-2"
+                >
+                  {t("following")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setIsFollowedPost("newest")}
+                  className="p-2"
+                >
+                  {t("newest")}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
         <div className="flex flex-col w-full border rounded-md">
           {data?.pages?.map((group, i) => {
             return (
