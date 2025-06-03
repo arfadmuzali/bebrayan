@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { cn } from "@/lib/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { format } from "date-fns";
 import axios from "axios";
 import { Send } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export interface Chat {
@@ -43,10 +44,11 @@ export default function MessageDetail({
   params: Promise<{ id: string }>;
 }) {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   const { id } = use(params);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["chat", id],
     queryFn: async () => {
       const response = await axios.get<Chat>("/api/chat/" + id);
@@ -71,9 +73,26 @@ export default function MessageDetail({
     },
     onSuccess: async () => {
       setMessage("");
-      await refetch();
     },
   });
+
+  useEffect(() => {
+    queryClient.setQueryData(["chats"], (oldData: Chat[]) => {
+      const newData = oldData?.map((chat) => {
+        if (chat.id === id) {
+          return {
+            ...chat,
+            messages: chat.messages.map((message) => ({
+              ...message,
+              isRead: true,
+            })),
+          };
+        }
+        return chat;
+      });
+      return newData;
+    });
+  }, [queryClient, data, id]);
 
   return (
     <div className="w-full h-full relative ">
@@ -98,7 +117,7 @@ export default function MessageDetail({
         </h3>
       </div>
 
-      <div className="overflow-y-auto space-y-2 p-2 max-h-[75vh]">
+      <div className="overflow-y-auto space-y-2 p-2 md:pb-14 pb-24 max-h-[75vh]">
         {isLoading && (
           <div className="w-full h-full flex items-center justify-center">
             <LoadingSpinner className="h-12 w-12" />
@@ -116,21 +135,28 @@ export default function MessageDetail({
             <div
               key={message.id}
               className={cn(
-                "w-full flex",
+                "w-full flex gap-2",
                 message.userId !== session?.user?.id
-                  ? "justify-start"
-                  : "justify-end"
+                  ? "justify-end flex-row-reverse"
+                  : "justify-end flex-row"
               )}
             >
+              <div className="flex items-center justify-center text-sm">
+                {format(new Date(message.createdAt), "d MMMM")}
+              </div>
               <div
                 className={cn(
-                  "p-2 text-sm border rounded-md w-fit",
+                  "p-2 border flex gap-2 rounded-md w-fit",
                   message.userId !== session?.user?.id
                     ? "rounded-ss-none"
                     : "rounded-se-none"
                 )}
               >
-                {message.content}
+                <div>{message.content}</div>
+                <div className="flex items-end justify-end text-xs text-muted-foreground">
+                  {format(new Date(message.createdAt), "KK:mm aaa ")}
+                  <span></span>
+                </div>
               </div>
             </div>
           );

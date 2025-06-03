@@ -30,6 +30,13 @@ export async function GET() {
         ],
       },
       include: {
+        messages: {
+          select: {
+            id: true,
+            userId: true,
+            isRead: true,
+          },
+        },
         user1: {
           select: {
             image: true,

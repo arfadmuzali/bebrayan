@@ -8,21 +8,38 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { BookUser } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import Pusher from "pusher-js";
+import { ReactNode, useEffect, useState } from "react";
 
 export interface Chat {
   id: string;
   user1Id: string;
   user2Id: string;
   createdAt: Date;
+  messages: Message[];
   user1: User;
   user2: User;
+}
+
+export interface Message {
+  id: string;
+  isRead: boolean;
+  userId: string;
+}
+
+export interface PusherMessage {
+  id: string;
+  content: string;
+  userId: string;
+  chatId: string;
+  isRead: boolean;
+  createdAt: Date;
 }
 
 export interface User {
@@ -33,6 +50,7 @@ export interface User {
 
 export default function MessageLayout({ children }: { children: ReactNode }) {
   const { data: session } = useSession();
+  const queryClient = useQueryClient();
 
   const [isContactOpen, setIsContactOpen] = useState(false);
 
@@ -45,7 +63,42 @@ export default function MessageLayout({ children }: { children: ReactNode }) {
     },
   });
 
-  console.log(chats);
+  useEffect(() => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY ?? "", {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER ?? "",
+    });
+
+    const channel = pusher.subscribe(session?.user?.id ?? "");
+
+    channel.bind("chat", (data: PusherMessage) => {
+      queryClient.setQueryData(["chat", data.chatId], (oldData: Chat) => {
+        const newData: Chat = {
+          ...oldData,
+          messages: [...oldData.messages, data],
+        };
+        return newData;
+      });
+
+      queryClient.setQueryData(["chats"], (oldData: Chat[]) => {
+        const newData: Chat[] = oldData.map((chat) => {
+          if (chat.id === data.chatId) {
+            return {
+              ...chat,
+              messages: [...chat.messages, data],
+            };
+          }
+          return chat;
+        });
+        return newData;
+      });
+    });
+
+    return () => {
+      channel.unsubscribe();
+      channel.unbind(session?.user?.id ?? "");
+      pusher.disconnect();
+    };
+  }, [session?.user?.id, queryClient]);
   return (
     <div className="max-w-screen-2xl mx-auto px-2 md:px-12 lg:px-16 md:h-[85vh] h-[80vh]">
       <Sheet open={isContactOpen} onOpenChange={setIsContactOpen}>
@@ -68,6 +121,12 @@ export default function MessageLayout({ children }: { children: ReactNode }) {
             </div>
             <div className="overflow-y-auto w-full md:h-[75vh] h-[70vh]">
               {chats?.map((chat) => {
+                const unread = chat.messages.filter(
+                  (message) =>
+                    message.isRead == false &&
+                    message.userId !== session?.user?.id
+                );
+
                 return (
                   <div
                     key={chat.id}
@@ -76,6 +135,7 @@ export default function MessageLayout({ children }: { children: ReactNode }) {
                     }}
                   >
                     <User
+                      unread={unread.length}
                       id={chat.id}
                       image={
                         session?.user?.id !== chat.user1Id
@@ -103,8 +163,14 @@ export default function MessageLayout({ children }: { children: ReactNode }) {
           </div>
           <div className="overflow-y-auto w-full md:h-[75vh] h-[70vh]">
             {chats?.map((chat) => {
+              const unread = chat.messages.filter(
+                (message) =>
+                  message.isRead == false &&
+                  message.userId !== session?.user?.id
+              );
               return (
                 <User
+                  unread={unread.length}
                   key={chat.id}
                   id={chat.id}
                   image={
@@ -134,26 +200,37 @@ function User({
   image,
   name,
   id,
+  unread,
 }: {
   image: string;
   name: string;
   id: string;
+  unread: number;
 }) {
   return (
     <Link
       href={"/message/" + id}
-      className="flex gap-2 p-2 items-center border-b border-muted hover:bg-muted"
+      className="flex gap-2 p-2 items-center border-b justify-between border-muted hover:bg-muted"
     >
-      <div className="relative h-12 w-12">
-        <Image
-          src={image ?? "/avatar-placeholder.svg"}
-          alt={name}
-          fill
-          sizes="3rem"
-          className="rounded-full"
-        />
+      <div className="flex gap-2 items-center">
+        <div className="relative h-12 w-12">
+          <Image
+            src={image ?? "/avatar-placeholder.svg"}
+            alt={name}
+            fill
+            sizes="3rem"
+            className="rounded-full"
+          />
+        </div>
+        <h3 className="text-lg">{name}</h3>
       </div>
-      <h3 className="text-lg">{name}</h3>
+      {!!unread && (
+        <div className="items-center justify-end px-2 flex ">
+          <span className="bg-destructive  rounded-full p-1 text-center text-xs w-6 h-6">
+            {unread}
+          </span>
+        </div>
+      )}
     </Link>
   );
 }

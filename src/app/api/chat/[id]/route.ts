@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import Pusher from "pusher";
 
 export async function GET(
   req: NextRequest,
@@ -42,7 +43,11 @@ export async function GET(
             image: true,
           },
         },
-        messages: true,
+        messages: {
+          orderBy: {
+            createdAt: "asc",
+          },
+        },
       },
     });
 
@@ -71,6 +76,17 @@ export async function GET(
       );
     }
 
+    //updating isRead
+    await prisma.message.updateMany({
+      where: {
+        chatId: chat.id,
+        userId: chat.user1Id === session.user.id ? chat.user2Id : chat.user1Id,
+      },
+      data: {
+        isRead: true,
+      },
+    });
+
     return NextResponse.json(chat);
   } catch (error) {
     console.error(error);
@@ -87,6 +103,12 @@ export async function GET(
 }
 
 const messageSchema = z.object({ content: z.string() });
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APP_ID!,
+  key: process.env.NEXT_PUBLIC_PUSHER_KEY!,
+  secret: process.env.PUSHER_SECRET!,
+  cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+});
 
 // create message
 export async function POST(
@@ -129,7 +151,21 @@ export async function POST(
         chatId: id,
         userId: session.user.id,
       },
+      include: {
+        chat: {
+          select: {
+            user1Id: true,
+            user2Id: true,
+          },
+        },
+      },
     });
+
+    pusher.trigger(
+      [message.chat.user1Id, message.chat.user2Id],
+      "chat",
+      message
+    );
 
     return NextResponse.json(message);
   } catch (error) {
