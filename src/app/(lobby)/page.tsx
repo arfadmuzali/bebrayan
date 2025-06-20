@@ -87,8 +87,7 @@ export default function HomePage() {
     queryKey: ["posts", isFollowedPost],
     queryFn: async ({ pageParam }) => {
       const response = await axios.get<Feed>(
-        `/api/post?take=10&cursor=${pageParam}&follow=${
-          isFollowedPost === "following"
+        `/api/post?take=10&cursor=${pageParam}&follow=${isFollowedPost === "following"
         }`
       );
       return response.data;

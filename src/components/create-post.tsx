@@ -40,7 +40,7 @@ export default function CreatePost() {
     onSuccess: async (data) => {
       queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
         if (!oldData) return oldData;
-        return {
+        const newData = {
           ...oldData,
           pages: oldData.pages.map((page, i) => {
             if (i == 0) {
@@ -49,6 +49,8 @@ export default function CreatePost() {
             return page;
           }),
         };
+
+        return newData
       });
     },
     onSettled: () => {
@@ -84,7 +86,7 @@ export default function CreatePost() {
               setPost(newValue);
             }}
             placeholder={t("makeAPost")}
-            // className="w-full bg-transparent placeholder-gray-500 outline-none border-none text-base py-3"
+          // className="w-full bg-transparent placeholder-gray-500 outline-none border-none text-base py-3"
           />
           <div className="flex w-full gap-6 items-center justify-end">
             {isPostFocused && (
