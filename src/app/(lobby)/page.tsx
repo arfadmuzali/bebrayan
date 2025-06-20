@@ -238,9 +238,10 @@ export default function HomePage() {
                         <Post
                           post={post.originalPost}
                           repostedByUser={post.user}
+                          isFollowedPost={isFollowedPost}
                         />
                       ) : (
-                        <Post post={post} />
+                        <Post post={post} isFollowedPost={isFollowedPost} />
                       )}
                     </div>
                   );

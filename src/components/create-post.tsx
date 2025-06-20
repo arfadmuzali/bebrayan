@@ -13,7 +13,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { LoadingSpinner } from "./ui/loading-spinner";
 import { Feed } from "@/app/(lobby)/page";
@@ -57,6 +57,31 @@ export default function CreatePost({ isFollowedPost }: { isFollowedPost?: string
       setPost("");
     },
   });
+
+  const postRef = useRef<HTMLTextAreaElement | null>(null)
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault();
+      if (!post) {
+        return
+      }
+      postMutation.mutate()
+    }
+  };
+  useEffect(() => {
+    if (postRef) {
+      postRef.current?.focus()
+    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key == "Enter" && event.altKey) {
+        postRef.current?.focus();
+
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown)
+
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [])
   return (
     <div className="border rounded-md p-2 md:px-4">
       <div className="max-w-screen-2xl flex gap-4 mx-auto w-full">
@@ -74,6 +99,8 @@ export default function CreatePost({ isFollowedPost }: { isFollowedPost?: string
         </Link>
         <div className="flex flex-col w-full">
           <AutoResizeTextarea
+            onKeyDown={handleKeyDown}
+            ref={postRef}
             value={post}
             onFocus={() => setIsPostFocused(true)}
             onBlur={() => setIsPostFocused(false)}

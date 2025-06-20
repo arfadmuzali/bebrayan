@@ -63,9 +63,11 @@ interface Repost {
 export default function Post({
   post,
   repostedByUser = null,
+  isFollowedPost
 }: {
   post: Post;
   repostedByUser?: User | null;
+  isFollowedPost?: string
 }) {
   const queryClient = useQueryClient();
 
@@ -150,7 +152,7 @@ export default function Post({
       );
     },
     onSettled: () => {
-      queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
+      queryClient.setQueryData<InfiniteData<Feed>>(["posts", isFollowedPost], (oldData) => {
         if (!oldData) return oldData;
         return {
           ...oldData,
