@@ -196,7 +196,7 @@ export default function HomePage() {
 
       {/* main feed */}
       <div className="lg:col-span-3 space-y-4 rounded-md">
-        <CreatePost />
+        <CreatePost isFollowedPost={isFollowedPost} />
         <div className="flex gap-2 w-full items-center md:p-0 p-1">
           <div className="border-t border-muted-foreground flex-1"></div>
           <DropdownMenu>

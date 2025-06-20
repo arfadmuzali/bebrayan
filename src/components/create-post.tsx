@@ -18,7 +18,7 @@ import { toast } from "sonner";
 import { LoadingSpinner } from "./ui/loading-spinner";
 import { Feed } from "@/app/(lobby)/page";
 
-export default function CreatePost() {
+export default function CreatePost({ isFollowedPost }: { isFollowedPost?: string }) {
   const queryClient = useQueryClient();
   const t = useTranslations("Post");
   const { data: session } = useSession();
@@ -38,7 +38,7 @@ export default function CreatePost() {
       toast.error(error.message);
     },
     onSuccess: async (data) => {
-      queryClient.setQueryData<InfiniteData<Feed>>(["posts"], (oldData) => {
+      queryClient.setQueryData<InfiniteData<Feed>>(["posts", isFollowedPost], (oldData) => {
         if (!oldData) return oldData;
         const newData = {
           ...oldData,
