@@ -20,8 +20,8 @@ Bebrayan is a text-based social media platform similar to the old Twitter, desig
 - [x] Show **followers list** and **following list** on the profile page
 - [x] Add **detailed post date** display at detail post (e.g., "15 May 2025, 14:30")
 - [x] Implement **optimistic update** when deleting post on feed
-- [ ] Create appropriate **meta tags** for **each page**
-- [ ] Implement **real-time chat** feature
+- [x] Create appropriate **meta tags** for **each page**
+- [x] Implement **real-time chat** feature
 - [ ] Add **notification feature**
 
 ## Instalation
