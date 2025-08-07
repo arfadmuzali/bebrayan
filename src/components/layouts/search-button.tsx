@@ -54,12 +54,14 @@ export default function SearchButton() {
     setSearch(value);
   }, 400);
 
+
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key.toLowerCase() === "k" && e.ctrlKey && !dialogOpen) {
-        e.preventDefault();
-        setDialogOpen(true);
-      }
+      const isTyping = ["INPUT", "TEXTAREA"].includes(document?.activeElement?.tagName ?? "")
+      if (isTyping) return
+      if (e.key == "/")
+        e.preventDefault()
+      setDialogOpen(true)
     };
     window.addEventListener("keydown", onKeyDown);
 
